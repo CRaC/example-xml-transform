@@ -31,7 +31,7 @@ jobs:
       run: |
         java -showversion -jar target/spring-boot-0.0.1-SNAPSHOT.jar &
         sleep 10
-        curl localhost:8080 | grep "Greetings from Spring Boot!"
+        curl -X POST -H "Content-Type: text/plain" -d "$(<example.xml)" localhost:8080/transform | grep "My Article"
         pkill -f target/spring-boot-0.0.1-SNAPSHOT.jar
 
     - name: Download JDK
@@ -53,4 +53,4 @@ jobs:
     - run: |
         jdk/bin/java -Zrestore:cr &
         sleep 3
-        curl localhost:8080 | grep "Greetings from Spring Boot!"
+        curl -X POST -H "Content-Type: text/plain" -d "$(<example.xml)" localhost:8080/transform | grep "My Article"
