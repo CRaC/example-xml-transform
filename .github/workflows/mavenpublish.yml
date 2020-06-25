@@ -48,7 +48,7 @@ jobs:
           -s "Started Application" \
           java -jar target/spring-boot-0.0.1-SNAPSHOT.jar)
         curl -X POST -H "Content-Type: text/plain" -d "$(<example.xml)" localhost:8080/transform | grep "My Article"
-        utils/bench.sh --content-type text/plain "http://localhost:8080/transform POST < example.xml"
+        utils/bench.sh -H "Content-type: text/plain" "http://localhost:8080/transform POST < example.xml"
         kill $P
 
     - name: Download JDK
@@ -70,7 +70,7 @@ jobs:
           -Djdk.crac.trace-startup-time=true \
           -jar target/spring-boot-0.0.1-SNAPSHOT.jar)
           # warmup the service
-          siege -b -c 1 -r 100000 --content-type text/plain "http://localhost:8080/transform POST < example.xml" > /dev/null
+          siege -b -c 1 -r 100000 -H "Content-type: text/plain" "http://localhost:8080/transform POST < example.xml" > /dev/null
           jcmd $P JDK.checkpoint
           [ 137 = $(utils/read-exitcode.sh exitcode) ]
 
@@ -80,7 +80,7 @@ jobs:
           -s "restore-finish" \
           jdk/bin/java -Zrestore:cr)
         curl -X POST -H "Content-Type: text/plain" -d "$(<example.xml)" localhost:8080/transform | grep "My Article"
-        utils/bench.sh --content-type text/plain "http://localhost:8080/transform POST < example.xml"
+        utils/bench.sh -H "Content-type: text/plain" "http://localhost:8080/transform POST < example.xml"
         kill $P
 
     - name: Test C/RaC startup time
