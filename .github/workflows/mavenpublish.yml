@@ -67,7 +67,7 @@ jobs:
           -Djdk.crac.trace-startup-time=true \
           -jar target/spring-boot-0.0.1-SNAPSHOT.jar)
           # warmup the service
-          siege -b -c 1 -r 100000 -H "Content-type: text/plain" "http://localhost:8080/transform POST < example.xml" > /dev/null
+          utils/bench.sh -H "Content-type: text/plain" "http://localhost:8080/transform POST < example.xml"
           jcmd $P JDK.checkpoint
           [ 137 = $(utils/read-exitcode.sh exitcode) ]
 
